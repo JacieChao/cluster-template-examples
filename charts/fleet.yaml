@@ -6,10 +6,10 @@ helm:
   values:
     cluster:
       # specify cluster name
-      name: template-rke2
+      name: jacie-fleet
 
     # specify cloud credential secret name, do not need to be provided if using custom driver
-    cloudCredentialSecretName: "cattle-global-data:cc-jl6d4"
+    cloudCredentialSecretName: "jacie"
 
     # specify cloud provider, options are amazonec2, digitalocean, azure, vsphere or custom
     cloudprovider: "amazonec2"
@@ -34,3 +34,84 @@ helm:
     # enable monitoring
     monitoring:
       enabled: false
+    nodepools:
+    - etcd: true
+      controlplane: true
+      worker: true
+
+      # specify nodepool size
+      quantity: 1
+
+      # Pause node pool
+      paused: false
+
+      # specify nodepool name
+      name: fleet-nodepool-1
+
+      # AWS instance type
+      instanceType: t3a.medium
+
+      # AWS region
+      region: ap-southeast-2
+
+      # Whether to create `rancher-node` security group. If false, can provide with existing security group
+      createSecurityGroup: true
+      # createSecurityGroup: false
+      # securityGroups: []
+
+      # AWS keypair to use
+      keypairName: ""
+
+      # Skip adding default rules to security groups
+      securityGroupReadonly: false
+
+      # File contents for sshKeyContents
+      sshKeyContents: ""
+
+      # AWS VPC subnet id
+      subnetId: "vpc-a2c096c5"
+
+      # Set this flag to enable CloudWatch monitoring
+      monitoring: false
+
+      # Make the specified port number accessible from the Internet
+      # openPort: ["8080", "8443"]
+
+      # Only use a private IP address
+      privateAddressOnly: false
+
+      # Set this flag to request spot instance
+      requestSpotInstance: true
+
+      # AWS Tags (e.g. key1,value1,key2,value2)
+      # tags: "foo,bar"
+
+      # Set retry count for recoverable failures (use -1 to disable)
+      retries: 5
+
+      # AWS root disk size (in GB)
+      rootSize: 50
+
+      # AWS spot instance bid price (in dollar)
+      spotPrice: 0.5
+
+      # Set the name of the ssh user
+      sshUser: ubuntu
+
+      # Amazon EBS volume type
+      volumeType: gp3
+
+      # AWS VPC id
+      # vpcId: ""
+
+      # Create an EBS optimized instance
+      useEbsOptimizedInstance: false
+
+      # Force the usage of private IP address
+      usePrivateAddress: false
+
+      # File contents for userdata
+      userdata: ""
+
+      # AWS zone for instance (i.e. a,b,c,d,e)
+      zone: c
