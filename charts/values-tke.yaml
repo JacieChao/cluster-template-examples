@@ -1,0 +1,12 @@
+cloudprovider: tke
+
+cloudCredentialSecretName: tke
+
+tkeVersion: 1.34.1
+
+region: ap-guangzhou
+
+credentialSecret: ""
+
+nodePoolList:
+- name: default-nodepool1

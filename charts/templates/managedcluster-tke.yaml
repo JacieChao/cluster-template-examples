@@ -1,0 +1,70 @@
+{{- if eq .Values.cloudprovider "tke" }}
+apiVersion: management.cattle.io/v3
+kind: Cluster
+metadata:
+  generateName: c-
+  name: {{ .Values.cluster.name }}
+  annotations:
+    field.cattle.io/creator-principal-name: local://user-b5m8r
+    field.cattle.io/creatorId: user-b5m8r
+spec:
+  displayName: {{ .Values.cluster.name }}
+  fleetWorkspaceName: fleet-default
+  internal: false
+  tkeConfig:
+    clusterAdvancedSettings:
+      containerRuntime: containerd
+    clusterBasicSettings:
+      clusterLevel: L5
+      clusterName: {{ .Values.cluster.name }}
+      clusterOs: tlinux3.1x86_64
+      clusterType: MANAGED_CLUSTER
+      clusterVersion: {{ .Values.tkeVersion }}
+      isAutoUpgrade: true
+      vpcId: vpc-8m6v0v47
+    clusterCIDRSettings:
+      clusterCIDR: 172.16.0.0/16
+      ignoreClusterCIDRConflict: true
+      maxClusterServiceNum: 1024
+      maxNodePodNum: 64
+      osCustomizeType: GENERAL
+    clusterEndpoint:
+      enable: true
+      securityGroup: sg-ce521meb
+      subnetId: subnet-gbc3blru
+    extensionAddon:
+      - addonName: CBS
+        addonParam: >-
+          {"kind":"App","spec":{"chart":{"chartName":"cbs","chartVersion":"1.0.9"},"values":{"values":[],"rawValues":"e30=","rawValuesType":"json"}}}
+    imported: false
+    nodePoolList:
+      - autoScalingGroupPara:
+          desiredCapacity: 1
+          maxSize: 1
+          subnetIds:
+            - subnet-gbc3blru
+          vpcId: vpc-8m6v0v47
+        enableAutoscale: true
+        launchConfigurePara:
+          dataDisks:
+            - diskSize: 30
+              diskType: CLOUD_SSD
+          instanceChargeType: POSTPAID_BY_HOUR
+          instanceType: SA2.MEDIUM4
+          internetChargeType: TRAFFIC_POSTPAID_BY_HOUR
+          internetMaxBandwidthOut: 10
+          keyIds:
+            - skey-onnxxuj7
+          publicIpAssigned: true
+          securityGroupIds:
+            - sg-ce521meb
+          systemDisk:
+            diskSize: 20
+            diskType: CLOUD_SSD
+        name: default-nodepool
+        nodePoolOs: tlinux3.1x86_64
+        osCustomizeType: GENERAL
+    region: {{ .Values.region }}
+    tkeCredentialSecret: {{ .Values.cloudCredentialSecretName }}
+  windowsPreferedCluster: false
+{{- end }}

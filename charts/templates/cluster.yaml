@@ -1,3 +1,4 @@
+{{- if ne $.Values.cloudprovider "tke" }}
 apiVersion: provisioning.cattle.io/v1
 kind: Cluster
 metadata:
@@ -208,4 +209,5 @@ spec:
 {{- if .Values.agentEnvs }}
   agentEnvVars:
 {{ toYaml .Values.agentEnvs | indent 4 }}
+{{- end }}
 {{- end }}
